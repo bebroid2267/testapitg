@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "7bwHi8dnn2TLQ7sMAjqcg0M4Mr4FKW2Alnkl+XXVX0vUtr9SOOswoonQR3RprHUkpFCvrbQexiXFeSYnza/C8w==",
+  "dgSpecHash": "tmn1LJ4e13gtndBcH4IlBbpa+6C0oGvlgmcIV57xZdrI3SND5VlVQemP2aZRfk8px3Ind2h0zYi2Rv2mdIXFJQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\кирилл\\source\\repos\\tgbot_testApi\\tgbot_testApi.csproj",
+  "projectFilePath": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\кирилл\\.nuget\\packages\\htmlagilitypack\\1.11.57\\htmlagilitypack.1.11.57.nupkg.sha512",
     "C:\\Users\\кирилл\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",
     "C:\\Users\\кирилл\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\кирилл\\.nuget\\packages\\microsoft.extensions.configuration.binder\\6.0.0\\microsoft.extensions.configuration.binder.6.0.0.nupkg.sha512",
