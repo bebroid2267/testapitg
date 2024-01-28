@@ -5,6 +5,12 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using HtmlAgilityPack;
 using System.Net;
+using System.Linq;
+using Aspose.Html;
+using Aspose.Html.Net;
+using System.IO;
+using Telegram.Bots.Requests;
+
 
 
 
@@ -31,7 +37,7 @@ namespace tgbot_testApi
         }
 
 
-        async private static Task Update(ITelegramBotClient bot, Update update, CancellationToken cts)
+        async private static Task Update(ITelegramBotClient bot, Update update, CancellationToken cts) 
         {
             var message = update.Message;
             if (update.Type == UpdateType.Message && update?.Message?.Text != null)
@@ -71,15 +77,14 @@ namespace tgbot_testApi
                 else if (currentState == BotState.SearchMusic)
                 {
 
-                    GetDownload(bot, message, msg);
+                   var path = await GetDownload(bot, message, msg);
+                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
-
-
-                    //await bot.SendAudioAsync(
-                    //    message.Chat.Id,
-                    //   audio: InputFile.FromUri("https://vk.com/audio-222136525_456239020_bcff1dcc7a3bbb685f")
-                    //    );
-
+                    await bot.SendAudioAsync(
+                        message.Chat.Id,
+                        InputFile.FromStream(new MemoryStream(fileContent))
+                        ) ;
+                   
                     currentState = BotState.Main;
                 }
                 else
@@ -91,35 +96,47 @@ namespace tgbot_testApi
 
 
         }
-        private static async void GetDownload(ITelegramBotClient bot, Message message, string track)
+        private static async Task<string> GetDownload(ITelegramBotClient bot, Message message, string track)
         {
-
+            var url = await GetMusic(track);
+            Random rnd = new();
+            var filename = $"{track}{rnd.Next(0, 1000)}";
+            var directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
 
             try
             {
-                var url = await GetMusic(track);
-                using (var client = new HttpClient())
+               
+                using (HttpClient client = new HttpClient())
                 {
-                    Random rnd = new();
-                    var filename = $"{track}{rnd.Next(0,1000)} ";
-                    var directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}";
-                    Uri serverUri = new Uri("https://vk.com/audio-222136525_456239020_fd36c70d87e617429b");
-                    Uri relative = new Uri(directoryPath,UriKind.Relative);
-                    Uri full = new Uri(serverUri, relative);
-                    using (var response = await client.GetAsync(full, HttpCompletionOption.ResponseHeadersRead))
-
-                    using (var stream = await response.Content.ReadAsStreamAsync())
+                    try
                     {
-                        using (var fileStream = System.IO.File.Create(directoryPath))
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
                         {
-                            await stream.CopyToAsync(fileStream);
+                            using (FileStream fileStream = System.IO.File.Create(directoryPath))
+                            {
+                                await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
+                            }
+
+                            await bot.SendTextMessageAsync(message.Chat.Id,"Файл успешно скачан и сохранен по пути: " + directoryPath);
+                            return directoryPath;
+                        }
+                        else
+                        {
+                            await bot.SendTextMessageAsync(message.Chat.Id,"Ошибка: " + response.StatusCode);
+                            return directoryPath;
                         }
                     }
-
-                    await bot.SendTextMessageAsync(message.Chat.Id, $"файл скачан и сохранен  на {directoryPath}");
-
-
+                    catch (Exception e)
+                    {
+                        await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
+                    }
+                   
                 }
+                
+
+
             }
             catch (Exception)
             {
@@ -128,16 +145,7 @@ namespace tgbot_testApi
             }
 
 
-
-
-
-            //using (var stream = System.IO.File.OpenRead(tempFile))
-            //{
-            //    var input = new InputFileStream(stream);
-            //    var mesage = await bot.SendAudioAsync(message.Chat.Id, input);
-            //}
-
-
+            return directoryPath;
         }
         async private static Task<string> GetMusic(string track)
         {
@@ -148,14 +156,21 @@ namespace tgbot_testApi
             HtmlDocument document = web.Load($"https://web.ligaudio.ru/mp3/{track}");
             HtmlDocument site2 = web.Load($"https://rus.hitmotop.com/search?q={track}");
             var firstvideo = document.DocumentNode.SelectSingleNode($"(//a[@itemprop='url'])[1]");
+            var twirdVideo = site2.DocumentNode.SelectSingleNode($"//a[contains(@href,'.mp3')]");
             string bebra = string.Empty;
-            if (firstvideo.Attributes["href"].Value.EndsWith(".mp3"))
-            {
-                bebra = firstvideo.Attributes["href"].Value + "?play";
+            string bebra2 = string.Empty;
+            //if (firstvideo.Attributes["href"].Value.EndsWith(".mp3"))
+            //{
+            //    bebra = firstvideo.Attributes["href"].Value + "?play";
 
+            //}
+            if (twirdVideo.Attributes["href"].Value.EndsWith("mp3"))
+            {
+                bebra2 = twirdVideo.Attributes["href"].Value;
             }
 
-            return bebra.Substring(2);
+            //return "http://"+ bebra.Substring(2);
+            return bebra2;
 
         }
 
