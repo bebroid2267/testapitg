@@ -104,3 +104,10 @@ C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\runtimes\wi
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.csproj.CopyComplete
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.genruntimeconfig.cache
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\obj\Debug\net8.0\ref\tgbot_testApi.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\Aspose.HTML.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
