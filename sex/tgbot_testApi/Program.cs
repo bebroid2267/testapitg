@@ -71,21 +71,37 @@ namespace tgbot_testApi
                 else if (msg == "Выйти из поиска")
                 {
                     currentState = BotState.Main;
+                    await bot.SendTextMessageAsync(message.Chat.Id,"вы вышли из поиска");
 
                 }
 
                 else if (currentState == BotState.SearchMusic)
                 {
+                    List<string> tracks = new List<string>();
+                    string AllTracks = string.Empty;
+                    foreach (var track in GetTenTracks(msg))
+                    {
+                        tracks.Add(track);
+                        AllTracks += track + "\n";
 
-                   var path = await GetDownload(bot, message, msg);
-                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+                    }
+                    
+                    await bot.SendTextMessageAsync(message.Chat.Id,$"Треки: \n {AllTracks}", replyMarkup: GetButtonTrack(tracks));
 
-                    await bot.SendAudioAsync(
-                        message.Chat.Id,
-                        InputFile.FromStream(new MemoryStream(fileContent))
-                        ) ;
+                   //var path = await GetDownload(bot, message, msg);
+                   // if (path != string.Empty)
+                   // {
+                   //     byte[] fileContent = System.IO.File.ReadAllBytes(path);
+
+                   //     await bot.SendAudioAsync(
+                   //         message.Chat.Id,
+                   //         InputFile.FromStream(new MemoryStream(fileContent))
+                   //         );
+                   // }
+
+                    
                    
-                    currentState = BotState.Main;
+                   
                 }
                 else
                 {
@@ -101,52 +117,93 @@ namespace tgbot_testApi
             var url = await GetMusic(track);
             Random rnd = new();
             var filename = $"{track}{rnd.Next(0, 1000)}";
-            var directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
-
-            try
-            {
-               
-                using (HttpClient client = new HttpClient())
-                {
-                    try
-                    {
-                        HttpResponseMessage response = await client.GetAsync(url);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            using (FileStream fileStream = System.IO.File.Create(directoryPath))
-                            {
-                                await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
-                            }
-
-                            await bot.SendTextMessageAsync(message.Chat.Id,"Файл успешно скачан и сохранен по пути: " + directoryPath);
-                            return directoryPath;
-                        }
-                        else
-                        {
-                            await bot.SendTextMessageAsync(message.Chat.Id,"Ошибка: " + response.StatusCode);
-                            return directoryPath;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
-                    }
-                   
-                }
+            var directoryPath = string.Empty;
+            if (url != string.Empty) {
                 
 
+                try
+                {
+                    directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
+                    using (HttpClient client = new HttpClient())
+                    {
+                        try
+                        {
+                            HttpResponseMessage response = await client.GetAsync(url);
 
+                            if (response.IsSuccessStatusCode)
+                            {
+                                using (FileStream fileStream = System.IO.File.Create(directoryPath))
+                                {
+                                    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
+                                }
+
+                                //await bot.SendTextMessageAsync(message.Chat.Id,"Файл успешно скачан и сохранен по пути: " + directoryPath);
+                                return directoryPath;
+                            }
+                            else
+                            {
+                                await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка: " + response.StatusCode);
+                                return directoryPath;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
+                        }
+
+                    }
+
+
+
+                }
+                catch (Exception)
+                {
+                    await bot.SendTextMessageAsync(message.Chat.Id, "ошибка в загрузке файла");
+                    throw;
+                }
             }
-            catch (Exception)
+            else if (url == string.Empty)
             {
-                await bot.SendTextMessageAsync(message.Chat.Id, "ошибка в загрузке файла");
-                throw;
+                await bot.SendTextMessageAsync(message.Chat.Id, "Ничего не нашлось");
+                
             }
+            
 
 
             return directoryPath;
         }
+
+         private static List<string> GetTenTracks(string track)
+        {
+            List<string> tracks = new List<string>();
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument document = web.Load($"https://rus.hitmotop.com/search?q={track}") ;
+            int countTracks = 1;
+
+            var nodes = document.DocumentNode.SelectSingleNode($"(//div[@class='track__title'])[{countTracks}]");
+
+            string res = string.Empty;
+            if (nodes != null)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    nodes = document.DocumentNode.SelectSingleNode($"(//div[contains(@class,'title')])[{countTracks}]");
+                    
+                    if (nodes != null)
+                    {
+                        res = nodes.InnerText.Trim() + $" {track}";
+                        tracks.Add(res.TrimStart());
+                    }
+                    countTracks++;
+                }
+            }
+            
+            
+
+            return tracks;
+        }
+
+
         async private static Task<string> GetMusic(string track)
         {
 
@@ -164,10 +221,15 @@ namespace tgbot_testApi
             //    bebra = firstvideo.Attributes["href"].Value + "?play";
 
             //}
-            if (twirdVideo.Attributes["href"].Value.EndsWith("mp3"))
+            if (twirdVideo != null)
             {
-                bebra2 = twirdVideo.Attributes["href"].Value;
+                if (twirdVideo.Attributes["href"].Value.EndsWith("mp3"))
+                {
+                    bebra2 = twirdVideo.Attributes["href"].Value;
+                }
             }
+            
+            
 
             //return "http://"+ bebra.Substring(2);
             return bebra2;
@@ -184,6 +246,23 @@ namespace tgbot_testApi
             };
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
+        }
+        private static InlineKeyboardMarkup GetButtonTrack(List<string> tracks )
+        {
+            List<InlineKeyboardButton[]> buttonRows = new List<InlineKeyboardButton[]>();
+            for (int i = 0; i < tracks.Count; i++)
+            {
+                var buttonText = tracks[i];
+                var callbackData = $"трек {i}";
+                buttonRows.Add(new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: buttonText, callbackData)
+
+                });
+                    
+            }
+            return new InlineKeyboardMarkup(buttonRows);
+
         }
 
 
