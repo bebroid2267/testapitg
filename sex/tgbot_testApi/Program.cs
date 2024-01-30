@@ -40,12 +40,35 @@ namespace tgbot_testApi
         async private static Task Update(ITelegramBotClient bot, Update update, CancellationToken cts) 
         {
             var message = update.Message;
-            if (update.Type == UpdateType.Message && update?.Message?.Text != null)
+            if (update.Type == UpdateType.Message && update?.Message?.Text != null || update.Type == UpdateType.CallbackQuery)
             {
-                if (update.Type == UpdateType.Message)
+                if (update.Type == UpdateType.Message && update?.Message?.Text != null)
                 {
-                    await HandleMessage(bot, update.Message);
+                    await HandleMessage(bot,update.Message);
+                }
+                if (update.Type == UpdateType.CallbackQuery)
+                {
+                    await HandleCallBackQueary(bot, update.Message, update.CallbackQuery);
+                }
 
+            }
+
+
+        }
+
+        async static Task HandleCallBackQueary(ITelegramBotClient bot,Message message, CallbackQuery? callbackQueary)
+        {
+            if (callbackQueary.Data != null)
+            {
+                var path = await GetDownload(bot,message, callbackQueary.Data);
+                if (path != string.Empty)
+                {
+                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+
+                    await bot.SendAudioAsync(
+                        callbackQueary.Message.Chat.Id,
+                        InputFile.FromStream(new MemoryStream(fileContent))
+                        );
                 }
 
             }
@@ -85,23 +108,23 @@ namespace tgbot_testApi
                         AllTracks += track + "\n";
 
                     }
-                    
-                    await bot.SendTextMessageAsync(message.Chat.Id,$"Треки: \n {AllTracks}", replyMarkup: GetButtonTrack(tracks));
 
-                   //var path = await GetDownload(bot, message, msg);
-                   // if (path != string.Empty)
-                   // {
-                   //     byte[] fileContent = System.IO.File.ReadAllBytes(path);
+                    await bot.SendTextMessageAsync(message.Chat.Id, $"Треки: \n {AllTracks}", replyMarkup: GetButtonTrack(tracks));
 
-                   //     await bot.SendAudioAsync(
-                   //         message.Chat.Id,
-                   //         InputFile.FromStream(new MemoryStream(fileContent))
-                   //         );
-                   // }
+                    //var path = await GetDownload(bot, message, msg);
+                    //if (path != string.Empty)
+                    //{
+                    //    byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
-                    
-                   
-                   
+                    //    await bot.SendAudioAsync(
+                    //        message.Chat.Id,
+                    //        InputFile.FromStream(new MemoryStream(fileContent))
+                    //        );
+                    //}
+
+
+
+
                 }
                 else
                 {
@@ -112,7 +135,7 @@ namespace tgbot_testApi
 
 
         }
-        private static async Task<string> GetDownload(ITelegramBotClient bot, Message message, string track)
+        private static async Task<string> GetDownload(ITelegramBotClient bot,Message message, string track)
         {
             var url = await GetMusic(track);
             Random rnd = new();
@@ -123,7 +146,7 @@ namespace tgbot_testApi
 
                 try
                 {
-                    directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
+                    directoryPath = $@"C:\Users\porka\OneDrive\Рабочий стол\str\{filename}.mp3";
                     using (HttpClient client = new HttpClient())
                     {
                         try
@@ -253,7 +276,12 @@ namespace tgbot_testApi
             for (int i = 0; i < tracks.Count; i++)
             {
                 var buttonText = tracks[i];
-                var callbackData = $"трек {i}";
+                string callbackData = buttonText;
+                if (buttonText.Length >=20)
+                {
+                    callbackData = buttonText.Substring(0,20);
+                }
+                
                 buttonRows.Add(new[]
                 {
                     InlineKeyboardButton.WithCallbackData(text: buttonText, callbackData)
