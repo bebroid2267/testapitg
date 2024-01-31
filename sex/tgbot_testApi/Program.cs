@@ -61,7 +61,7 @@ namespace tgbot_testApi
             if (callbackQueary.Data != null)
             {
                 var path = await GetDownload(bot,message, callbackQueary.Data);
-                if (path != string.Empty)
+                if (path != string.Empty && path != null)
                 {
                     byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
@@ -146,7 +146,8 @@ namespace tgbot_testApi
 
                 try
                 {
-                    directoryPath = $@"C:\Users\porka\OneDrive\Рабочий стол\str\{filename}.mp3";
+                    //directoryPath = $@"/root/bot2/storage/{filename}.mp3";
+                    directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
                     using (HttpClient client = new HttpClient())
                     {
                         try
@@ -277,9 +278,9 @@ namespace tgbot_testApi
             {
                 var buttonText = tracks[i];
                 string callbackData = buttonText;
-                if (buttonText.Length >=20)
+                if (buttonText.Length >=60)
                 {
-                    callbackData = buttonText.Substring(0,20);
+                    callbackData = buttonText.Substring(0,60);
                 }
                 
                 buttonRows.Add(new[]
