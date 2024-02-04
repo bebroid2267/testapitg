@@ -10,6 +10,8 @@ using Aspose.Html;
 using Aspose.Html.Net;
 using System.IO;
 using Telegram.Bots.Requests;
+using System.CodeDom.Compiler;
+using Aspose.Html.Dom.Events;
 
 
 
@@ -60,7 +62,8 @@ namespace tgbot_testApi
         {
             if (callbackQueary.Data != null)
             {
-                var path = await GetDownload(bot,message, callbackQueary.Data);
+               var track =  DataBase.GetTitleTrack(callbackQueary.Data);
+                var path = await GetDownload(bot,callbackQueary, track);
                 if (path != string.Empty && path != null)
                 {
                     byte[] fileContent = System.IO.File.ReadAllBytes(path);
@@ -109,18 +112,9 @@ namespace tgbot_testApi
 
                     }
 
-                    await bot.SendTextMessageAsync(message.Chat.Id, $"Треки: \n {AllTracks}", replyMarkup: GetButtonTrack(tracks));
+                    await bot.SendTextMessageAsync(message.Chat.Id, msg, replyMarkup: GetButtonTrack(tracks,message.Chat.Id.ToString()));
 
-                    //var path = await GetDownload(bot, message, msg);
-                    //if (path != string.Empty)
-                    //{
-                    //    byte[] fileContent = System.IO.File.ReadAllBytes(path);
-
-                    //    await bot.SendAudioAsync(
-                    //        message.Chat.Id,
-                    //        InputFile.FromStream(new MemoryStream(fileContent))
-                    //        );
-                    //}
+                    
 
 
 
@@ -135,7 +129,7 @@ namespace tgbot_testApi
 
 
         }
-        private static async Task<string> GetDownload(ITelegramBotClient bot,Message message, string track)
+        private static async Task<string> GetDownload(ITelegramBotClient bot,CallbackQuery? callback  , string track)
         {
             var url = await GetMusic(track);
             Random rnd = new();
@@ -147,7 +141,8 @@ namespace tgbot_testApi
                 try
                 {
                     //directoryPath = $@"/root/bot2/storage/{filename}.mp3";
-                    directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
+                    //directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
+                   directoryPath = $@"C:\Users\porka\OneDrive\Рабочий стол\str\{filename}.mp3";
                     using (HttpClient client = new HttpClient())
                     {
                         try
@@ -161,18 +156,17 @@ namespace tgbot_testApi
                                     await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
                                 }
 
-                                //await bot.SendTextMessageAsync(message.Chat.Id,"Файл успешно скачан и сохранен по пути: " + directoryPath);
                                 return directoryPath;
                             }
                             else
                             {
-                                await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка: " + response.StatusCode);
+                                await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка: " + response.StatusCode);
                                 return directoryPath;
                             }
                         }
                         catch (Exception e)
                         {
-                            await bot.SendTextMessageAsync(message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
+                            await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
                         }
 
                     }
@@ -182,13 +176,13 @@ namespace tgbot_testApi
                 }
                 catch (Exception)
                 {
-                    await bot.SendTextMessageAsync(message.Chat.Id, "ошибка в загрузке файла");
+                    await bot.SendTextMessageAsync(callback.Message.Chat.Id, "ошибка в загрузке файла");
                     throw;
                 }
             }
-            else if (url == string.Empty)
+            else if (url == string.Empty || url != null)
             {
-                await bot.SendTextMessageAsync(message.Chat.Id, "Ничего не нашлось");
+                await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ничего не нашлось");
                 
             }
             
@@ -204,18 +198,19 @@ namespace tgbot_testApi
             HtmlDocument document = web.Load($"https://rus.hitmotop.com/search?q={track}") ;
             int countTracks = 1;
 
-            var nodes = document.DocumentNode.SelectSingleNode($"(//div[@class='track__title'])[{countTracks}]");
-
+            var nodeTitleTrack = document.DocumentNode.SelectSingleNode($"(//div[@class='track__title'])[{countTracks}]");
+            var nodeArtistName = document.DocumentNode.SelectSingleNode($"(//div[@class='track__desc'])[{countTracks}]");
             string res = string.Empty;
-            if (nodes != null)
+            if (nodeTitleTrack != null && nodeArtistName != null)
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    nodes = document.DocumentNode.SelectSingleNode($"(//div[contains(@class,'title')])[{countTracks}]");
+                    nodeTitleTrack = document.DocumentNode.SelectSingleNode($"(//div[contains(@class,'title')])[{countTracks}]");
+                    nodeArtistName = document.DocumentNode.SelectSingleNode($"(//div[contains(@class,'desc')])[{countTracks}]");
                     
-                    if (nodes != null)
+                    if (nodeTitleTrack != null && nodeArtistName != null)
                     {
-                        res = nodes.InnerText.Trim() + $" {track}";
+                        res = nodeTitleTrack.InnerText.Trim() + " "+ nodeArtistName.InnerText.Trim();
                         tracks.Add(res.TrimStart());
                     }
                     countTracks++;
@@ -271,23 +266,31 @@ namespace tgbot_testApi
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
         }
-        private static InlineKeyboardMarkup GetButtonTrack(List<string> tracks )
+        private static InlineKeyboardMarkup GetButtonTrack(List<string> tracks,string chatid )
         {
             List<InlineKeyboardButton[]> buttonRows = new List<InlineKeyboardButton[]>();
             for (int i = 0; i < tracks.Count; i++)
             {
+                var identTrack = Guid.NewGuid().ToString("N");
                 var buttonText = tracks[i];
-                string callbackData = buttonText;
-                if (buttonText.Length >=60)
+                string callbackData = identTrack;
+                if (identTrack.Length >= 20 )
                 {
-                    callbackData = buttonText.Substring(0,60);
+                    callbackData = identTrack.Substring(0,20);
                 }
-                
-                buttonRows.Add(new[]
+                if (DataBase.AddTrack(tracks[i], callbackData, chatid) == true)
+                {
+                    buttonRows.Add(new[]
                 {
                     InlineKeyboardButton.WithCallbackData(text: buttonText, callbackData)
 
                 });
+
+
+                }
+                
+
+                
                     
             }
             return new InlineKeyboardMarkup(buttonRows);
