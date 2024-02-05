@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("tgbot_testApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f996f82b22992de2c5b9ad74f5fd6b9e76deb6a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("tgbot_testApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("tgbot_testApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,7 +11,9 @@ using Aspose.Html.Net;
 using System.IO;
 using Telegram.Bots.Requests;
 using System.CodeDom.Compiler;
-using Aspose.Html.Dom.Events;
+//using Aspose.Html.Dom.Events;
+using Newtonsoft.Json;
+using System.Text;
 
 
 
@@ -64,15 +66,15 @@ namespace tgbot_testApi
             {
                var track =  DataBase.GetTitleTrack(callbackQueary.Data);
                 var path = await GetDownload(bot,callbackQueary, track);
-                if (path != string.Empty && path != null)
-                {
-                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+                //if (path != string.Empty && path != null)
+                //{
+                //    byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
-                    await bot.SendAudioAsync(
-                        callbackQueary.Message.Chat.Id,
-                        InputFile.FromStream(new MemoryStream(fileContent))
-                        );
-                }
+                //    await bot.SendAudioAsync(
+                //        callbackQueary.Message.Chat.Id,
+                //        InputFile.FromStream(new MemoryStream(fileContent))
+                //        );
+                //}
 
             }
 
@@ -151,9 +153,17 @@ namespace tgbot_testApi
 
                             if (response.IsSuccessStatusCode)
                             {
-                                using (FileStream fileStream = System.IO.File.Create(directoryPath))
+                                //using (FileStream fileStream = System.IO.File.Create(directoryPath))
+                                //{
+                                //    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
+                                //}
+                               var result = await UploadTrackToApis(url,filename);
+                                if (result != null)
                                 {
-                                    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
+                                    string json = result.Content.ReadAsStringAsync().Result;
+                                    object a = JsonConvert.DeserializeObject(json);
+                                    string b = JsonConvert.SerializeObject(a,Formatting.Indented);
+                                    await bot.SendTextMessageAsync(callback.Message.Chat.Id,b);
                                 }
 
                                 return directoryPath;
@@ -253,6 +263,57 @@ namespace tgbot_testApi
             //return "http://"+ bebra.Substring(2);
             return bebra2;
 
+        }
+        private static async Task<HttpResponseMessage> UploadTrackToApis(string url, string fileName)
+        {
+
+            Dictionary<string, string> Params = new Dictionary<string, string>()
+            {
+                {"Authorization","Bearer public_12a1yp1713pwNp9ErXyM4SJ9sGRH " },
+                {"Content-Type","application/json" },
+                {"path",$"/upload/tracks/{fileName}" },
+                {"url",$"{url.Substring(8)}" }
+
+            };
+
+            string accountId = "12a1yp1";
+           
+
+
+            
+
+            string apiUrl = $"https://api.bytescale.com/v2/accounts/12a1yp1/uploads/{url}";
+            
+            using (var client = new HttpClient())
+            {
+
+                try
+                {
+
+                    System.Net.Http.FormUrlEncodedContent content = new System.Net.Http.FormUrlEncodedContent(Params);
+                    
+                   return await client.PostAsync(apiUrl,content);
+                }
+                catch (Exception x)
+                {
+                    await Console.Out.WriteLineAsync($"ошибка {x.ToString()}");
+                    throw;
+                }
+                finally
+                {
+                    client.Dispose();
+                }
+
+                return null; 
+
+                
+               
+
+
+
+
+
+            }
         }
 
         private static Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
