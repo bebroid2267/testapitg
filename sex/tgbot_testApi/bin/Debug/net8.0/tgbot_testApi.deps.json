@@ -9,7 +9,7 @@
       "tgbot_testApi/1.0.0": {
         "dependencies": {
           "Aspose.HTML": "24.1.0",
-          "HtmlAgilityPack": "1.11.57",
+          "HtmlAgilityPack": "1.11.58",
           "Microsoft.Data.Sqlite": "8.0.1",
           "SQLite": "3.13.0",
           "Telegram.Bot": "19.0.0",
@@ -35,11 +35,11 @@
           }
         }
       },
-      "HtmlAgilityPack/1.11.57": {
+      "HtmlAgilityPack/1.11.58": {
         "runtime": {
           "lib/netstandard2.0/HtmlAgilityPack.dll": {
-            "assemblyVersion": "1.11.57.0",
-            "fileVersion": "1.11.57.0"
+            "assemblyVersion": "1.11.58.0",
+            "fileVersion": "1.11.58.0"
           }
         }
       },
@@ -776,12 +776,12 @@
       "path": "aspose.html/24.1.0",
       "hashPath": "aspose.html.24.1.0.nupkg.sha512"
     },
-    "HtmlAgilityPack/1.11.57": {
+    "HtmlAgilityPack/1.11.58": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-zDxnHcAvi+qhZG602eKaPJKmzm0T8npKVML0RMwjrRBabpmTRtu2OVpfNkMUfYMgQ+5EllOkSeGxu0uFVV2zFw==",
-      "path": "htmlagilitypack/1.11.57",
-      "hashPath": "htmlagilitypack.1.11.57.nupkg.sha512"
+      "sha512": "sha512-/LzjIKoAWdyXOn6o+zJTN2qpNIwfaDWbSQ974pVRwnzHsUFohIOSILdtkPrSO6YC38MNj4nDbpr1RkVBDE1RWQ==",
+      "path": "htmlagilitypack/1.11.58",
+      "hashPath": "htmlagilitypack.1.11.58.nupkg.sha512"
     },
     "Microsoft.Data.Sqlite/8.0.1": {
       "type": "package",

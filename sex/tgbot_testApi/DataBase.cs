@@ -10,7 +10,8 @@ namespace tgbot_testApi
 {
     internal static class DataBase
     {
-        public static readonly string connectionString = @"Data Source = C:\Users\porka\OneDrive\Рабочий стол\dbForMusicBot.db";
+        //public static readonly string connectionString = @"Data Source = C:\Users\porka\OneDrive\Рабочий стол\dbForMusicBot.db";
+        public static readonly string connectionString = @"Data Source = C:\Users\кирилл\Desktop\dbForMusicBot.db";
 
         public static string GetTitleTrack(string identif)
         {

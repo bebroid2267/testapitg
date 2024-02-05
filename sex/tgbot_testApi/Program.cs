@@ -14,6 +14,7 @@ using System.CodeDom.Compiler;
 //using Aspose.Html.Dom.Events;
 using Newtonsoft.Json;
 using System.Text;
+using Yandex.Music.Api;
 
 
 
@@ -157,11 +158,11 @@ namespace tgbot_testApi
                                 //{
                                 //    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
                                 //}
-                               var result = await UploadTrackToApis(url,filename);
+                               var result = await UploadTrackToApis(url);
                                 if (result != null)
                                 {
-                                    string json = result.Content.ReadAsStringAsync().Result;
-                                    object a = JsonConvert.DeserializeObject(json);
+                                    
+                                    object a = JsonConvert.DeserializeObject(result);
                                     string b = JsonConvert.SerializeObject(a,Formatting.Indented);
                                     await bot.SendTextMessageAsync(callback.Message.Chat.Id,b);
                                 }
@@ -233,6 +234,7 @@ namespace tgbot_testApi
         }
 
 
+
         async private static Task<string> GetMusic(string track)
         {
 
@@ -264,56 +266,87 @@ namespace tgbot_testApi
             return bebra2;
 
         }
-        private static async Task<HttpResponseMessage> UploadTrackToApis(string url, string fileName)
+        private static async Task<string> UploadTrackToApis(string url1)
         {
 
-            Dictionary<string, string> Params = new Dictionary<string, string>()
+
+
+
+            Uri url2 = new Uri(url1);
+            string url = "https://api.bytescale.com/v2/accounts/12a1yp1/uploads/url";
+            string apiKey = "secret_12a1yp129VfCdeyLwi88YwFgHRuQ";
+            string requestBody = $"{{\"url\": \"{url2}\"}}";
+
+
+            using (HttpClient client = new HttpClient())
             {
-                {"Authorization","Bearer public_12a1yp1713pwNp9ErXyM4SJ9sGRH " },
-                {"Content-Type","application/json" },
-                {"path",$"/upload/tracks/{fileName}" },
-                {"url",$"{url.Substring(8)}" }
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + apiKey);
 
-            };
+                var content = new System.Net.Http.StringContent(requestBody, Encoding.UTF8, "application/json");
 
-            string accountId = "12a1yp1";
-           
+                HttpResponseMessage response = await client.PostAsync(url, content);
 
-
-            
-
-            string apiUrl = $"https://api.bytescale.com/v2/accounts/12a1yp1/uploads/{url}";
-            
-            using (var client = new HttpClient())
-            {
-
-                try
+                if (response.IsSuccessStatusCode)
                 {
-
-                    System.Net.Http.FormUrlEncodedContent content = new System.Net.Http.FormUrlEncodedContent(Params);
-                    
-                   return await client.PostAsync(apiUrl,content);
+                    string result = await response.Content.ReadAsStringAsync();
+                   return result;
                 }
-                catch (Exception x)
+                else
                 {
-                    await Console.Out.WriteLineAsync($"ошибка {x.ToString()}");
-                    throw;
+                    string errorResult = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("Error: " + errorResult);
                 }
-                finally
-                {
-                    client.Dispose();
-                }
-
-                return null; 
-
-                
-               
-
-
-
-
-
             }
+
+            return null;
+
+
+            //Dictionary<string, string> Params = new Dictionary<string, string>()
+            //{
+            //    {"Authorization","Bearer public_12a1yp1713pwNp9ErXyM4SJ9sGRH"},
+            //    {"Content-Type","application/json" },
+            //    {"originalFileName",fileName},
+            //    {"path",$"/v2/accounts/12a1yp1/uploads/url"},
+            //    {"url",url}
+
+            //};
+
+
+
+
+            //string apiUrl = "https://api.bytescale.com";
+
+
+            //using (var client = new HttpClient())
+            //{
+
+            //    try
+            //    {
+
+            //        System.Net.Http.FormUrlEncodedContent content = new System.Net.Http.FormUrlEncodedContent(Params);
+
+            //       return await client.PostAsync(apiUrl,content);
+            //    }
+            //    catch (Exception x)
+            //    {
+            //        await Console.Out.WriteLineAsync($"ошибка {x.ToString()}");
+            //        throw;
+            //    }
+            //    finally
+            //    {
+            //        client.Dispose();
+            //    }
+
+            //    return null; 
+
+
+
+
+
+
+
+
+            //}
         }
 
         private static Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)

@@ -23,7 +23,7 @@
           }
         }
       },
-      "HtmlAgilityPack/1.11.57": {
+      "HtmlAgilityPack/1.11.58": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/HtmlAgilityPack.dll": {
@@ -1098,6 +1098,18 @@
         "runtime": {
           "lib/net6.0/Telegram.Bots.Extensions.Polling.dll": {}
         }
+      },
+      "Yandex.Music.Api/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/Yandex.Music.Api.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Yandex.Music.Api.dll": {}
+        }
       }
     }
   },
@@ -1118,14 +1130,14 @@
         "license/thirdpartylicenses-Aspose.Html for .NET.pdf"
       ]
     },
-    "HtmlAgilityPack/1.11.57": {
-      "sha512": "zDxnHcAvi+qhZG602eKaPJKmzm0T8npKVML0RMwjrRBabpmTRtu2OVpfNkMUfYMgQ+5EllOkSeGxu0uFVV2zFw==",
+    "HtmlAgilityPack/1.11.58": {
+      "sha512": "/LzjIKoAWdyXOn6o+zJTN2qpNIwfaDWbSQ974pVRwnzHsUFohIOSILdtkPrSO6YC38MNj4nDbpr1RkVBDE1RWQ==",
       "type": "package",
-      "path": "htmlagilitypack/1.11.57",
+      "path": "htmlagilitypack/1.11.58",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "htmlagilitypack.1.11.57.nupkg.sha512",
+        "htmlagilitypack.1.11.58.nupkg.sha512",
         "htmlagilitypack.nuspec",
         "lib/Net35/HtmlAgilityPack.dll",
         "lib/Net35/HtmlAgilityPack.pdb",
@@ -2506,37 +2518,45 @@
         "telegram.bots.extensions.polling.5.9.0.nupkg.sha512",
         "telegram.bots.extensions.polling.nuspec"
       ]
+    },
+    "Yandex.Music.Api/1.0.0": {
+      "sha512": "Rw0+6/Ws8gx2czQYzmQSf9foX0pLMPLTm1LaTJbvfasmlVpWgc3qNMhsF6jiuocbZGfA3q3S4A8EiCPxQHH8UQ==",
+      "type": "package",
+      "path": "yandex.music.api/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Yandex.Music.Api.dll",
+        "yandex.music.api.1.0.0.nupkg.sha512",
+        "yandex.music.api.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Aspose.HTML >= 24.1.0",
-      "HtmlAgilityPack >= 1.11.57",
+      "HtmlAgilityPack >= 1.11.58",
       "Microsoft.Data.Sqlite >= 8.0.1",
       "SQLite >= 3.13.0",
       "Telegram.Bot >= 19.0.0",
-      "Telegram.Bots.Extensions.Polling >= 5.9.0"
+      "Telegram.Bots.Extensions.Polling >= 5.9.0",
+      "Yandex.Music.Api >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\porka\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\кирилл\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "projectUniqueName": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
       "projectName": "tgbot_testApi",
-      "projectPath": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
-      "packagesPath": "C:\\Users\\porka\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\obj\\",
+      "projectPath": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "packagesPath": "C:\\Users\\кирилл\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\porka\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\кирилл\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2568,7 +2588,7 @@
           },
           "HtmlAgilityPack": {
             "target": "Package",
-            "version": "[1.11.57, )"
+            "version": "[1.11.58, )"
           },
           "Microsoft.Data.Sqlite": {
             "target": "Package",
@@ -2585,6 +2605,10 @@
           "Telegram.Bots.Extensions.Polling": {
             "target": "Package",
             "version": "[5.9.0, )"
+          },
+          "Yandex.Music.Api": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           }
         },
         "imports": [
@@ -2603,7 +2627,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
