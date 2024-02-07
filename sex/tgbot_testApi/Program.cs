@@ -6,15 +6,14 @@ using Telegram.Bot.Types.ReplyMarkups;
 using HtmlAgilityPack;
 using System.Net;
 using System.Linq;
-using Aspose.Html;
-using Aspose.Html.Net;
 using System.IO;
 using Telegram.Bots.Requests;
 using System.CodeDom.Compiler;
-//using Aspose.Html.Dom.Events;
 using Newtonsoft.Json;
 using System.Text;
-using Yandex.Music.Api;
+using YandexMusicApi.Api;
+using YandexMusicApi.Network;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -118,10 +117,6 @@ namespace tgbot_testApi
                     await bot.SendTextMessageAsync(message.Chat.Id, msg, replyMarkup: GetButtonTrack(tracks,message.Chat.Id.ToString()));
 
                     
-
-
-
-
                 }
                 else
                 {
@@ -135,9 +130,12 @@ namespace tgbot_testApi
         private static async Task<string> GetDownload(ITelegramBotClient bot,CallbackQuery? callback  , string track)
         {
             var url = await GetMusic(track);
+
             Random rnd = new();
+
             var filename = $"{track}{rnd.Next(0, 1000)}";
             var directoryPath = string.Empty;
+
             if (url != string.Empty) {
                 
 
@@ -158,14 +156,27 @@ namespace tgbot_testApi
                                 //{
                                 //    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
                                 //}
-                               var result = await UploadTrackToApis(url);
-                                if (result != null)
+
+                                var idTrack = await GetIdTrackOnYandex(track);
+
+                                if (idTrack != null)
                                 {
-                                    
-                                    object a = JsonConvert.DeserializeObject(result);
-                                    string b = JsonConvert.SerializeObject(a,Formatting.Indented);
-                                    await bot.SendTextMessageAsync(callback.Message.Chat.Id,b);
+                                   url =  GetUrlForDownloadTrack(idTrack);
+
+                                    var result = await UploadTrackToApis(url);
+
+                                    if (result != null)
+                                    {
+
+                                        object a = JsonConvert.DeserializeObject(result);
+                                        string b = JsonConvert.SerializeObject(a, Formatting.Indented);
+                                        await bot.SendTextMessageAsync(callback.Message.Chat.Id, b);
+                                    }
+
                                 }
+
+
+                               
 
                                 return directoryPath;
                             }
@@ -212,6 +223,7 @@ namespace tgbot_testApi
             var nodeTitleTrack = document.DocumentNode.SelectSingleNode($"(//div[@class='track__title'])[{countTracks}]");
             var nodeArtistName = document.DocumentNode.SelectSingleNode($"(//div[@class='track__desc'])[{countTracks}]");
             string res = string.Empty;
+
             if (nodeTitleTrack != null && nodeArtistName != null)
             {
                 for (int i = 0; i < 10; i++)
@@ -222,6 +234,7 @@ namespace tgbot_testApi
                     if (nodeTitleTrack != null && nodeArtistName != null)
                     {
                         res = nodeTitleTrack.InnerText.Trim() + " "+ nodeArtistName.InnerText.Trim();
+                        
                         tracks.Add(res.TrimStart());
                     }
                     countTracks++;
@@ -243,15 +256,13 @@ namespace tgbot_testApi
 
             HtmlDocument document = web.Load($"https://web.ligaudio.ru/mp3/{track}");
             HtmlDocument site2 = web.Load($"https://rus.hitmotop.com/search?q={track}");
+
             var firstvideo = document.DocumentNode.SelectSingleNode($"(//a[@itemprop='url'])[1]");
             var twirdVideo = site2.DocumentNode.SelectSingleNode($"//a[contains(@href,'.mp3')]");
+            
             string bebra = string.Empty;
             string bebra2 = string.Empty;
-            //if (firstvideo.Attributes["href"].Value.EndsWith(".mp3"))
-            //{
-            //    bebra = firstvideo.Attributes["href"].Value + "?play";
-
-            //}
+            
             if (twirdVideo != null)
             {
                 if (twirdVideo.Attributes["href"].Value.EndsWith("mp3"))
@@ -260,19 +271,82 @@ namespace tgbot_testApi
                 }
             }
             
-            
-
-            //return "http://"+ bebra.Substring(2);
             return bebra2;
 
         }
+
+        static string GetUrlForDownloadTrack(string trackId)
+        {
+            
+            string token = "y0_AgAAAAAhA-lPAAG8XgAAAADRAzhwMJfIR5gWTGaeeX27VkE5XiImapI";
+
+            NetworkParams networkParams = new NetworkParams() { };
+            Album albumApi = new(networkParams, token);
+            Track trackApi = new Track(networkParams, token);
+
+
+            var downloadInfo =  trackApi.GetDownloadInfoWithToken(trackId).Result;
+            var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
+            var directLink = trackApi.GetDirectLink(downloadInfoUrl).Result;
+
+            return directLink;
+
+            //var bestsTrack = albumApi.GetTracks(5568718).Result["result"]["bests"].ToList(); // Get the top 5 tracks from the Evolve - Imagine Dragons album
+            //foreach (var i in bestsTrack)
+            //{
+            //    var downloadInfo = trackApi.GetDownloadInfo(i.ToString()).Result; // Get a list of available codecs and bitrates
+
+            //    var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString(); // Get the necessary string to get a direct link to the track
+
+            //    var directLink = trackApi.GetDirectLink(downloadInfoUrl).Result; // Getting a direct link to the track (30 second demo)
+
+            //    Console.WriteLine(directLink);
+            //}
+
+            
+
+           
+
+        }
+
+
+        static async Task<string> GetIdTrackOnYandex(string titleTrack)
+        {
+            string url = $"https://api.music.yandex.net:443/search?text={titleTrack}&page=0&type=all&nococrrect=false";
+
+            using (HttpClient client = new())
+            {
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    JObject responses = JObject.Parse(result);
+                    JToken tracks = responses["result"]["best"]["result"];
+
+                    int trackId = (int)tracks["id"];
+                    client.Dispose();
+                    return trackId.ToString();
+                }
+                else
+                {
+                    client.Dispose();
+                    return null;
+                }
+
+            }
+
+
+        }
+
         private static async Task<string> UploadTrackToApis(string url1)
         {
-
-
-
-
+            
             Uri url2 = new Uri(url1);
+
             string url = "https://api.bytescale.com/v2/accounts/12a1yp1/uploads/url";
             string apiKey = "secret_12a1yp129VfCdeyLwi88YwFgHRuQ";
             string requestBody = $"{{\"url\": \"{url2}\"}}";
@@ -289,64 +363,22 @@ namespace tgbot_testApi
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();
-                   return result;
+
+                    client.Dispose();
+
+                    return result;
                 }
                 else
                 {
                     string errorResult = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Error: " + errorResult);
+
+                    client.Dispose();
+
+                    return ("Error: " + errorResult);
                 }
             }
 
-            return null;
 
-
-            //Dictionary<string, string> Params = new Dictionary<string, string>()
-            //{
-            //    {"Authorization","Bearer public_12a1yp1713pwNp9ErXyM4SJ9sGRH"},
-            //    {"Content-Type","application/json" },
-            //    {"originalFileName",fileName},
-            //    {"path",$"/v2/accounts/12a1yp1/uploads/url"},
-            //    {"url",url}
-
-            //};
-
-
-
-
-            //string apiUrl = "https://api.bytescale.com";
-
-
-            //using (var client = new HttpClient())
-            //{
-
-            //    try
-            //    {
-
-            //        System.Net.Http.FormUrlEncodedContent content = new System.Net.Http.FormUrlEncodedContent(Params);
-
-            //       return await client.PostAsync(apiUrl,content);
-            //    }
-            //    catch (Exception x)
-            //    {
-            //        await Console.Out.WriteLineAsync($"ошибка {x.ToString()}");
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        client.Dispose();
-            //    }
-
-            //    return null; 
-
-
-
-
-
-
-
-
-            //}
         }
 
         private static Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
@@ -382,10 +414,7 @@ namespace tgbot_testApi
 
 
                 }
-                
-
-                
-                    
+                 
             }
             return new InlineKeyboardMarkup(buttonRows);
 

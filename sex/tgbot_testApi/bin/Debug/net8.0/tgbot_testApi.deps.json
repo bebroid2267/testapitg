@@ -13,10 +13,25 @@
           "Microsoft.Data.Sqlite": "8.0.1",
           "SQLite": "3.13.0",
           "Telegram.Bot": "19.0.0",
-          "Telegram.Bots.Extensions.Polling": "5.9.0"
+          "Telegram.Bots.Extensions.Polling": "5.9.0",
+          "Yandex.Music.Api": "1.0.0",
+          "YandexMusicApi": "2.0.4",
+          "YouTubeApi": "1.1.1"
         },
         "runtime": {
           "tgbot_testApi.dll": {}
+        }
+      },
+      "AngleSharp/1.0.1": {
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Text.Encoding.CodePages": "7.0.0"
+        },
+        "runtime": {
+          "lib/net7.0/AngleSharp.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Aspose.HTML/24.1.0": {
@@ -26,7 +41,7 @@
           "System.Drawing.Common": "4.7.3",
           "System.Numerics.Vectors": "4.5.0",
           "System.Security.Permissions": "4.5.0",
-          "System.Text.Encoding.CodePages": "4.5.0"
+          "System.Text.Encoding.CodePages": "7.0.0"
         },
         "runtime": {
           "lib/netstandard2.0/Aspose.HTML.dll": {
@@ -445,11 +460,11 @@
           }
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.1.25517"
+            "fileVersion": "13.0.3.27908"
           }
         }
       },
@@ -634,6 +649,7 @@
           }
         }
       },
+      "System.Buffers/4.5.1": {},
       "System.Diagnostics.DiagnosticSource/7.0.0": {},
       "System.Diagnostics.EventLog/6.0.0": {
         "runtime": {
@@ -708,12 +724,7 @@
           "Microsoft.NETCore.Platforms": "3.1.9"
         }
       },
-      "System.Text.Encoding.CodePages/4.5.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.9",
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        }
-      },
+      "System.Text.Encoding.CodePages/7.0.0": {},
       "System.Text.Encodings.Web/6.0.0": {
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
@@ -727,7 +738,7 @@
       },
       "Telegram.Bot/19.0.0": {
         "dependencies": {
-          "Newtonsoft.Json": "13.0.1"
+          "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/net6.0/Telegram.Bot.dll": {
@@ -740,7 +751,7 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration.Binder": "6.0.0",
           "Microsoft.Extensions.Http.Polly": "6.0.10",
-          "Newtonsoft.Json": "13.0.1"
+          "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/net6.0/Telegram.Bots.dll": {
@@ -760,6 +771,40 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "Yandex.Music.Api/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Yandex.Music.Api.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "YandexMusicApi/2.0.4": {
+        "dependencies": {
+          "AngleSharp": "1.0.1",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/YandexMusicApi.dll": {
+            "assemblyVersion": "2.0.4.0",
+            "fileVersion": "2.0.4.0"
+          }
+        }
+      },
+      "YouTubeApi/1.1.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net7.0/YouTubeApi.dll": {
+            "assemblyVersion": "1.1.1.0",
+            "fileVersion": "1.1.1.0"
+          }
+        }
       }
     }
   },
@@ -768,6 +813,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AngleSharp/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uIezZhHZqWEb4zw/D5Xnskqb/sivIFwfWcUX2srPWTE10IYahfrdhWTIk859BpEmPmxSlMoL+S0JimFTaWGaHA==",
+      "path": "anglesharp/1.0.1",
+      "hashPath": "anglesharp.1.0.1.nupkg.sha512"
     },
     "Aspose.HTML/24.1.0": {
       "type": "package",
@@ -1000,12 +1052,12 @@
       "path": "microsoft.win32.systemevents/4.7.0",
       "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
     },
-    "Newtonsoft.Json/13.0.1": {
+    "Newtonsoft.Json/13.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
-      "path": "newtonsoft.json/13.0.1",
-      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
     "Polly/7.2.2": {
       "type": "package",
@@ -1055,6 +1107,13 @@
       "sha512": "sha512-PQ2Oq3yepLY4P7ll145P3xtx2bX8xF4PzaKPRpw9jZlKvfe4LE/saAV82inND9usn1XRpmxXk7Lal3MTI+6CNg==",
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.6",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512"
+    },
+    "System.Buffers/4.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
+      "path": "system.buffers/4.5.1",
+      "hashPath": "system.buffers.4.5.1.nupkg.sha512"
     },
     "System.Diagnostics.DiagnosticSource/7.0.0": {
       "type": "package",
@@ -1119,12 +1178,12 @@
       "path": "system.security.principal.windows/4.5.0",
       "hashPath": "system.security.principal.windows.4.5.0.nupkg.sha512"
     },
-    "System.Text.Encoding.CodePages/4.5.0": {
+    "System.Text.Encoding.CodePages/7.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-S0wEUiKcLvRlkFUXca8uio1UQ5bYQzYgOmOKtCqaBQC3GR9AJjh43otcM32IGsAyvadFTaAMw9Irm6dS4Evfng==",
-      "path": "system.text.encoding.codepages/4.5.0",
-      "hashPath": "system.text.encoding.codepages.4.5.0.nupkg.sha512"
+      "sha512": "sha512-LSyCblMpvOe0N3E+8e0skHcrIhgV2huaNcjUUEa8hRtgEAm36aGkRoC8Jxlb6Ra6GSfF29ftduPNywin8XolzQ==",
+      "path": "system.text.encoding.codepages/7.0.0",
+      "hashPath": "system.text.encoding.codepages.7.0.0.nupkg.sha512"
     },
     "System.Text.Encodings.Web/6.0.0": {
       "type": "package",
@@ -1160,6 +1219,27 @@
       "sha512": "sha512-zzGB7i4lY4WV2WqumyWTEN3lWFtReBvYt1tUXxRs9FyyAMDMfxX2MyC8SggoH6xzqiWmp5eflTHbI7BsYWcxHQ==",
       "path": "telegram.bots.extensions.polling/5.9.0",
       "hashPath": "telegram.bots.extensions.polling.5.9.0.nupkg.sha512"
+    },
+    "Yandex.Music.Api/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Rw0+6/Ws8gx2czQYzmQSf9foX0pLMPLTm1LaTJbvfasmlVpWgc3qNMhsF6jiuocbZGfA3q3S4A8EiCPxQHH8UQ==",
+      "path": "yandex.music.api/1.0.0",
+      "hashPath": "yandex.music.api.1.0.0.nupkg.sha512"
+    },
+    "YandexMusicApi/2.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vSDzyxlyqOTKkfcu+5d15ug1RNHM0jQT3xJhWOaFFiFMMpUlct1iu+hWYy4sF7YSKY0lW4wVBxZPOaZh/tBJRg==",
+      "path": "yandexmusicapi/2.0.4",
+      "hashPath": "yandexmusicapi.2.0.4.nupkg.sha512"
+    },
+    "YouTubeApi/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mY+UnSB/jMv7MAPp7PY3f54HatId2vI47LWeZcenqX+8y97Xc+lfj/0W1cCkAYCPFwPpQttu0V2/pR7ZiI1AAQ==",
+      "path": "youtubeapi/1.1.1",
+      "hashPath": "youtubeapi.1.1.1.nupkg.sha512"
     }
   }
 }
