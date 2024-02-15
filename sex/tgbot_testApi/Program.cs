@@ -14,6 +14,8 @@ using System.Text;
 using YandexMusicApi.Api;
 using YandexMusicApi.Network;
 using Newtonsoft.Json.Linq;
+using TagLib;
+using System.Runtime.CompilerServices;
 
 
 
@@ -29,7 +31,8 @@ namespace tgbot_testApi
         {
             Main,
             SearchMusic,
-            OutOfSearch
+            OutOfSearch,
+            MyTracks
 
 
         }
@@ -65,44 +68,131 @@ namespace tgbot_testApi
         {
             if (callbackQueary.Data != null)
             {
-                var trackId = callbackQueary.Data;
+                //var trackId = callbackQueary.Data;
 
-                var downloadUrl = GetUrlForDownloadTrack(trackId);
+                //var downloadUrl = GetUrlForDownloadTrack(trackId);
 
-                if (downloadUrl != null)
-                {
-                    //var res = await UploadTrackToApis(downloadUrl);
-
-                    //var urlTrack = res.Substring(res.LastIndexOf("fileUrl") + 10);
-                    //var url = urlTrack.Substring(0, urlTrack.Length - 2);
-                    var urlCover = "https://avatars.yandex.net/get-music-content/10210263/31c6830d.a.28033940-1/100x100";
-                    await bot.SendDocumentAsync(
-                        callbackQueary.Message.Chat.Id,
-                        InputFileUrl.FromUri(downloadUrl),thumbnail: InputFile.FromUri(urlCover) );
-
-                    //await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, );
-                }
-                else
-                {
-                    await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id,"ошибка в handlecallback");
-                }
-
-               //var track =  DataBase.GetTitleTrack(callbackQueary.Data);
-                //var path = await GetDownload(bot,callbackQueary, track);
-                //if (path != string.Empty && path != null)
+                //if (downloadUrl != null)
                 //{
-                //    byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
-                //    await bot.SendAudioAsync(
+
+                //    await bot.SendDocumentAsync(
                 //        callbackQueary.Message.Chat.Id,
-                //        InputFile.FromStream(new MemoryStream(fileContent))
-                //        );
+                //        InputFileUrl.FromUri(downloadUrl));
+
+
                 //}
+                //else
+                //{
+                //    await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id,"ошибка в handlecallback");
+                //}
+
+                //var track =  DataBase.GetTitleTrack(callbackQueary.Data);
+
+
+                if (callbackQueary.Data.StartsWith("like"))
+                {
+                    var trackId = callbackQueary.Data.Substring(5);
+
+                    var res = DataBase.AddToLikeTracks(callbackQueary.Message.Chat.Id.ToString(), trackId);
+
+                    if (res)
+                    {
+                        await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>👀 Трек добавлен в избранные!</i>" ,parseMode: ParseMode.Html);
+
+                        var path = await GetDownload(bot, callbackQueary, trackId);
+                        
+                        if (path != string.Empty && path != null)
+                        {
+                            byte[] fileContent = System.IO.File.ReadAllBytes(path);
+
+                        }
+
+                    }
+
+                    else if (res == false)
+                    {
+
+
+                        await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>⛔️ Трек уже есть в избранных!</i>", parseMode: ParseMode.Html);
+
+                    }
+
+                }
+
+                else if (callbackQueary.Data.StartsWith("Dis"))
+                {
+                    var trackId = callbackQueary.Data.Substring(8);
+                    //var path = $@"C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\tracksStorage\{trackId}.mp3";
+                    var path = $"/root/trackStorage/{trackId}.mp3";
+
+                    var res = DataBase.IfExistsTrackLike(callbackQueary.Message.Chat.Id.ToString(), trackId);
+
+                        if (res)
+                        {
+                        
+
+                                await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>⚡️Трек был успешно убран из избранных!</i>", parseMode: ParseMode.Html);
+
+                                DataBase.DeleteLikeTrack(callbackQueary.Message.Chat.Id.ToString(),trackId);
+
+                                System.IO.File.Delete(path);
+
+
+                        }
+                        else if (res == false)
+                        {
+                                await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>❗️Трек отсутствует в избранных</i>",parseMode: ParseMode.Html);
+
+                        }
+
+                }
+
+                else if (!callbackQueary.Data.Contains("like"))
+                {
+                    var trackId = callbackQueary.Data;
+                    
+
+                    if (DataBase.IfExistsTrackLike(callbackQueary.Message.Chat.Id.ToString(),trackId))
+                    {
+                            //var pathh = $@"C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\tracksStorage\{trackId}.mp3";
+                        var pathh = $"/root/trackStorage/{trackId}.mp3";
+
+                            byte[] fileContent = System.IO.File.ReadAllBytes(pathh);
+
+                            var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
+
+                            await bot.SendAudioAsync(
+                                callbackQueary.Message.Chat.Id,
+                                InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
+                                );
+                    }
+                    else
+                    {
+                        var path = await GetDownload(bot, callbackQueary, trackId);
+
+                            if (path != string.Empty && path != null)
+                            {
+                                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+
+                                    var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
+
+                                    await bot.SendAudioAsync(
+                                        callbackQueary.Message.Chat.Id,
+                                        InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
+                                        );
+                                    System.IO.File.Delete(path);
+
+                            }
+                    }
+                    
+                    
+                }        
 
             }
 
-
         }
+
         private static async Task HandleMessage(ITelegramBotClient bot, Message message)
         {
             var msg = message.Text;
@@ -110,29 +200,48 @@ namespace tgbot_testApi
             {
                 if (msg == "/start")
                 {
-                    await bot.SendTextMessageAsync(message.Chat.Id, "Здарова. Ботик тест api привествует", replyMarkup: ButtonMarkup());
-                    currentState = BotState.Main;
+                    await bot.SendTextMessageAsync(message.Chat.Id, "<b>🎧 Это -  бот для скачивания и прослушивания музыки! \r\n\r\nПиши:\r\n⚡️ Ник артиста \r\n " +
+                        "      Или\r\n⚡️Название трека, альбома\r\n\r\n✨Также ты можешь сохранять музыку прямо в боте!" +
+                        "  - Для этого нажми кнопку снизу.</b>", replyMarkup: ButtonMarkup(),parseMode: ParseMode.Html);
+                    
 
                 }
-                else if (msg == "Поиск трека")
+                
+                
+                else if (msg == "Мои треки")
                 {
-                    await bot.SendTextMessageAsync(message.Chat.Id, "Напиши имя артиста или название трека");
-                    currentState = BotState.SearchMusic;
-                }
-                else if (msg == "Выйти из поиска")
-                {
-                    currentState = BotState.Main;
-                    await bot.SendTextMessageAsync(message.Chat.Id,"вы вышли из поиска");
+                    List<string> idTracks = DataBase.GetLikeTrack(message.Chat.Id.ToString());
+
+                    if (idTracks.Count > 0)
+                    {
+                        int count = 0;
+
+                        TracksList tracks = new TracksList();
+
+                        foreach (var trackId in idTracks)
+                        {
+                            var infoTrack = DataBase.GetMetadataTrack(trackId);
+                            tracks.AddTrack(count, infoTrack[2], infoTrack[0], infoTrack[1]);
+                            count++;
+                        }
+                        await bot.SendTextMessageAsync(message.Chat.Id, "Ваши треки", replyMarkup: GetButtonTrack(tracks, message.Chat.Id.ToString()));
+                    }
+                    else {
+                        await bot.SendTextMessageAsync(message.Chat.Id, "<i>\U0001f976 Пока что, вам не понравился ни один трек. \r\nИсправим?😏 </i>",parseMode: ParseMode.Html);
+                    }
+                    
 
                 }
+                
 
-                else if (currentState == BotState.SearchMusic)
+                else  
                 {
                     
                     string AllTracks = string.Empty;
 
                     TracksList tracksInfo = GetInfoTrackOnYandex(msg);
 
+                    
 
 
                     //foreach (var track in GetTenTracks(msg))
@@ -150,105 +259,90 @@ namespace tgbot_testApi
 
 
                 }
-                else
-                {
-                    await bot.SendTextMessageAsync(message.Chat.Id, "ошибка");
-                }
+                
 
             }
 
 
         }
-        //private static async Task<string> GetDownload(ITelegramBotClient bot,CallbackQuery? callback  , string track)
-        //{
-        //    //var url = await GetMusic(track);
+        private static async Task<string> GetDownload(ITelegramBotClient bot, CallbackQuery? callback, string trackId)
+        {
+            var url = GetUrlForDownloadTrack(trackId);
+
             
+            var filename = trackId;
+            var directoryPath = string.Empty;
 
-        //    Random rnd = new();
-
-        //    var filename = $"{track}{rnd.Next(0, 1000)}";
-        //    var directoryPath = string.Empty;
-
-        //    if (url != string.Empty) {
-                
-
-        //        try
-        //        {
-        //            //directoryPath = $@"/root/bot2/storage/{filename}.mp3";
-        //            //directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
-        //           directoryPath = $@"C:\Users\porka\OneDrive\Рабочий стол\str\{filename}.mp3";
-        //            using (HttpClient client = new HttpClient())
-        //            {
-        //                try
-        //                {
-        //                    HttpResponseMessage response = await client.GetAsync(url);
-
-        //                    if (response.IsSuccessStatusCode)
-        //                    {
-        //                        //using (FileStream fileStream = System.IO.File.Create(directoryPath))
-        //                        //{
-        //                        //    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
-        //                        //}
-
-        //                        TracksList tracksInfo =  GetInfoTrackOnYandex(track);
+            if (url != string.Empty && url != null)
+            {
 
 
+                try
+                {
+                    
+                    //directoryPath = $@"C:\Users\кирилл\Desktop\storagesrab\{filename}.mp3";
+                    //directoryPath = $@"C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\tracksStorage\{filename}.mp3";
+                    directoryPath = $"/root/trackStorage/{trackId}.mp3";
+                    using (HttpClient client = new HttpClient())
+                    {
+                        try
+                        {
+                            HttpResponseMessage response = await client.GetAsync(url);
 
-        //                        if (tracksInfo != null)
-        //                        {
-        //                           url =  GetUrlForDownloadTrack(idTrack);
-
-        //                            var result = await UploadTrackToApis(url);
-
-        //                            if (result != null)
-        //                            {
-
-        //                                object a = JsonConvert.DeserializeObject(result);
-        //                                string b = JsonConvert.SerializeObject(a, Formatting.Indented);
-        //                                await bot.SendTextMessageAsync(callback.Message.Chat.Id, b);
-        //                            }
-
-        //                        }
+                            if (response.IsSuccessStatusCode)
+                            {
 
 
-                               
+                                using (FileStream fileStream = System.IO.File.Create(directoryPath))
+                                {
+                                    await (await response.Content.ReadAsStreamAsync()).CopyToAsync(fileStream);
+                                }
 
-        //                        return directoryPath;
-        //                    }
-        //                    else
-        //                    {
-        //                        await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка: " + response.StatusCode);
-        //                        return directoryPath;
-        //                    }
-        //                }
-        //                catch (Exception e)
-        //                {
-        //                    await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
-        //                }
+                               List<string> metadataTracks =  DataBase.GetMetadataTrack(trackId);
+                                var tagFile = TagLib.File.Create(directoryPath);
+                                tagFile.Tag.Title = metadataTracks[0];
+                                tagFile.Tag.Performers = new string[] { metadataTracks[1] };
+                                
+                                tagFile.Save();
+                                
+                                client.Dispose();
+                                return directoryPath;
+                            }
+                            else
+                            {
+                                await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка: " + response.StatusCode);
+                                client.Dispose();
+                                return directoryPath;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ошибка скачивания файла: " + e.Message);
+                        }
 
-        //            }
+                    }
 
 
 
-        //        }
-        //        catch (Exception)
-        //        {
-        //            await bot.SendTextMessageAsync(callback.Message.Chat.Id, "ошибка в загрузке файла");
-        //            throw;
-        //        }
-        //    }
-        //    else if (url == string.Empty || url != null)
-        //    {
-        //        await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ничего не нашлось");
-                
-        //    }
-            
+                }
+                catch (Exception)
+                {
+                    await bot.SendTextMessageAsync(callback.Message.Chat.Id, "ошибка в загрузке файла");
+                    throw;
+                }
+            }
+            else if (url == string.Empty || url != null)
+            {
+                await bot.SendTextMessageAsync(callback.Message.Chat.Id, "Ничего не нашлось");
+
+            }
 
 
-        //    return directoryPath;
-        //}
 
-         private static List<string> GetTenTracks(string track)
+            return directoryPath;
+        }
+
+        private static List<string> GetTenTracks(string track)
         {
             List<string> tracks = new List<string>();
             HtmlWeb web = new HtmlWeb();
@@ -277,7 +371,7 @@ namespace tgbot_testApi
             }
             
             
-
+            
             return tracks;
         }
 
@@ -319,10 +413,19 @@ namespace tgbot_testApi
 
 
             var downloadInfo =  trackApi.GetDownloadInfoWithToken(trackId).Result;
-            var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
-            var directLink = trackApi.GetDirectLink(downloadInfoUrl).Result;
+            if (downloadInfo["result"] != null && downloadInfo["result"][0] != null && downloadInfo["result"][0]["downloadInfoUrl"] != null)
+            {
+                var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
+                var directLink = trackApi.GetDirectLink(downloadInfoUrl).Result;
 
-            return directLink;
+                return directLink;
+            }
+            else
+            {
+                return null;
+            }
+
+            
 
             //var bestsTrack = albumApi.GetTracks(5568718).Result["result"]["bests"].ToList(); // Get the top 5 tracks from the Evolve - Imagine Dragons album
             //foreach (var i in bestsTrack)
@@ -342,6 +445,7 @@ namespace tgbot_testApi
 
         }
 
+        
 
         static TracksList GetInfoTrackOnYandex(string titleTrack)
         {
@@ -354,7 +458,8 @@ namespace tgbot_testApi
 
             var searchResult = defApi.Search(titleTrack, typeSearch: "track").Result;
 
-
+            Track track = new Track(networkParams, token);
+            
 
             if (searchResult != null && searchResult["result"] != null && searchResult["result"]["tracks"] != null && searchResult["result"]["tracks"]["results"] != null)
             {
@@ -363,8 +468,13 @@ namespace tgbot_testApi
 
                 foreach (var item in tracksResults)
                 {
+                    List<string> tracksInfo = new List<string>();
+                    tracksInfo.Add(item["id"].ToString());
+                    var res = track.GetInformTrack(tracksInfo);
+                    
                     tracks.AddTrack(countTracks, item["id"].ToString(), item["title"].ToString(), item["artists"][0]["name"].ToString());
 
+                    DataBase.AddMetadataTrack(item["title"].ToString(), item["artists"][0]["name"].ToString(), "https://" + item["coverUri"].ToString().Replace("%%", "100x100"), item["id"].ToString());
                     countTracks++;
                 }
                 return tracks;
@@ -430,6 +540,22 @@ namespace tgbot_testApi
             return Task.CompletedTask;
         }
 
+        
+
+        private static InlineKeyboardMarkup GetButtonLikeTrack(string trackId)
+        {
+            List<InlineKeyboardButton[]> button = new List<InlineKeyboardButton[]>();
+
+            button.Add(new[]
+            {
+                InlineKeyboardButton.WithCallbackData(text: "❤️", "like " + trackId),
+                InlineKeyboardButton.WithCallbackData(text: "💔", "Dislike " + trackId)
+            });
+            return new InlineKeyboardMarkup(button);
+        }
+
+        
+        
 
         private static InlineKeyboardMarkup GetButtonTrack(TracksList tracksInfo,string chatid )
         {
@@ -476,8 +602,8 @@ namespace tgbot_testApi
 
             ReplyKeyboardMarkup reply = new(new[]
             {
-                new KeyboardButton ( "Поиск трека" ),
-                new KeyboardButton( "Выйти из поиска" ),
+                
+                new KeyboardButton( "Мои треки" ),
 
             })
             {

@@ -232,3 +232,8 @@ C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\Yandex.Musi
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\YouTubeApi.dll
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\AngleSharp.dll
 C:\Users\кирилл\Desktop\sex\sex\tgbot_testApi\bin\Debug\net8.0\YandexMusicApi.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\AngleSharp.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\Yandex.Music.Api.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\YandexMusicApi.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\YouTubeApi.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\TagLibSharp.dll
