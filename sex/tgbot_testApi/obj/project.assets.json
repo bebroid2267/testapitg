@@ -40,7 +40,7 @@
           }
         }
       },
-      "HtmlAgilityPack/1.11.58": {
+      "HtmlAgilityPack/1.11.59": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/HtmlAgilityPack.dll": {
@@ -53,10 +53,10 @@
           }
         }
       },
-      "Microsoft.Data.Sqlite/8.0.1": {
+      "Microsoft.Data.Sqlite/8.0.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Data.Sqlite.Core": "8.0.1",
+          "Microsoft.Data.Sqlite.Core": "8.0.2",
           "SQLitePCLRaw.bundle_e_sqlite3": "2.1.6"
         },
         "compile": {
@@ -66,7 +66,7 @@
           "lib/netstandard2.0/_._": {}
         }
       },
-      "Microsoft.Data.Sqlite.Core/8.0.1": {
+      "Microsoft.Data.Sqlite.Core/8.0.2": {
         "type": "package",
         "dependencies": {
           "SQLitePCLRaw.core": "2.1.6"
@@ -1222,14 +1222,14 @@
         "license/thirdpartylicenses-Aspose.Html for .NET.pdf"
       ]
     },
-    "HtmlAgilityPack/1.11.58": {
-      "sha512": "/LzjIKoAWdyXOn6o+zJTN2qpNIwfaDWbSQ974pVRwnzHsUFohIOSILdtkPrSO6YC38MNj4nDbpr1RkVBDE1RWQ==",
+    "HtmlAgilityPack/1.11.59": {
+      "sha512": "0tMaGzTJ5uFFMCYvprZ4hRYg6Dm5E+/WeMFJiD5K83Fe/Y6kyLaRKcfrfUwfb1j428XzB4/2RR7sdxoQX5eaEA==",
       "type": "package",
-      "path": "htmlagilitypack/1.11.58",
+      "path": "htmlagilitypack/1.11.59",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "htmlagilitypack.1.11.58.nupkg.sha512",
+        "htmlagilitypack.1.11.59.nupkg.sha512",
         "htmlagilitypack.nuspec",
         "lib/Net35/HtmlAgilityPack.dll",
         "lib/Net35/HtmlAgilityPack.pdb",
@@ -1270,23 +1270,23 @@
         "lib/uap10.0/HtmlAgilityPack.pri"
       ]
     },
-    "Microsoft.Data.Sqlite/8.0.1": {
-      "sha512": "+7uDWNYZmLrVq9eABAKwy1phGbpoFVohKCUoh/nGg9WiBwi856EkAJYFiQhTJWoXxzpInkLFj/6KACoSB7ODYg==",
+    "Microsoft.Data.Sqlite/8.0.2": {
+      "sha512": "dbv4HUa1OE5zXkFd5iSV7d+HZJ0ge+4GBiJNX6MXuG0tCGqCkMgh0g7jnLHXPmLY2q7vu5gKSMSraie0fmUACg==",
       "type": "package",
-      "path": "microsoft.data.sqlite/8.0.1",
+      "path": "microsoft.data.sqlite/8.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "lib/netstandard2.0/_._",
-        "microsoft.data.sqlite.8.0.1.nupkg.sha512",
+        "microsoft.data.sqlite.8.0.2.nupkg.sha512",
         "microsoft.data.sqlite.nuspec"
       ]
     },
-    "Microsoft.Data.Sqlite.Core/8.0.1": {
-      "sha512": "s8C8xbwMb79EqzTaIhwiBrYtbv6ATnUW19pJed4fKVgN5K4VPQ7JUGqBLztknvD6EJIMKrfRnINGTjnZghrDGw==",
+    "Microsoft.Data.Sqlite.Core/8.0.2": {
+      "sha512": "C7VelOBNUrVlatmOoJ9P+vc/gegduv7d2uB5oy7bFxfgZBfaGr+eREW+QuppXwi3MHp0WBxxWjqkK5gD7ymDQA==",
       "type": "package",
-      "path": "microsoft.data.sqlite.core/8.0.1",
+      "path": "microsoft.data.sqlite.core/8.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1297,7 +1297,7 @@
         "lib/net8.0/Microsoft.Data.Sqlite.xml",
         "lib/netstandard2.0/Microsoft.Data.Sqlite.dll",
         "lib/netstandard2.0/Microsoft.Data.Sqlite.xml",
-        "microsoft.data.sqlite.core.8.0.1.nupkg.sha512",
+        "microsoft.data.sqlite.core.8.0.2.nupkg.sha512",
         "microsoft.data.sqlite.core.nuspec"
       ]
     },
@@ -2694,8 +2694,8 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Aspose.HTML >= 24.1.0",
-      "HtmlAgilityPack >= 1.11.58",
-      "Microsoft.Data.Sqlite >= 8.0.1",
+      "HtmlAgilityPack >= 1.11.59",
+      "Microsoft.Data.Sqlite >= 8.0.2",
       "SQLite >= 3.13.0",
       "TagLibSharp >= 2.3.0",
       "Telegram.Bot >= 19.0.0",
@@ -2706,24 +2706,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\porka\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\кирилл\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "projectUniqueName": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
       "projectName": "tgbot_testApi",
-      "projectPath": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
-      "packagesPath": "C:\\Users\\porka\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\obj\\",
+      "projectPath": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "packagesPath": "C:\\Users\\кирилл\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\кирилл\\Desktop\\sex\\sex\\tgbot_testApi\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\porka\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\кирилл\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2731,7 +2726,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2744,11 +2738,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2761,11 +2750,11 @@
           },
           "HtmlAgilityPack": {
             "target": "Package",
-            "version": "[1.11.58, )"
+            "version": "[1.11.59, )"
           },
           "Microsoft.Data.Sqlite": {
             "target": "Package",
-            "version": "[8.0.1, )"
+            "version": "[8.0.2, )"
           },
           "SQLite": {
             "target": "Package",
@@ -2812,7 +2801,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
