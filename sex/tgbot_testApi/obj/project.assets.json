@@ -2712,11 +2712,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "projectUniqueName": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
       "projectName": "tgbot_testApi",
-      "projectPath": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
+      "projectPath": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\tgbot_testApi.csproj",
       "packagesPath": "C:\\Users\\porka\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\obj\\",
+      "outputPath": "C:\\Users\\porka\\Source\\Repos\\testapitg\\sex\\tgbot_testApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2731,6 +2731,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2743,6 +2744,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -2806,7 +2812,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

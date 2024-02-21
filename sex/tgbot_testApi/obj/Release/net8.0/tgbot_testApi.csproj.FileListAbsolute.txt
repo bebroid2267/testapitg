@@ -179,9 +179,9 @@ C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.AssemblyInfo.cs
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.csproj.CoreCompileInputs.cache
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.sourcelink.json
-C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.csproj.CopyComplete
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\refint\tgbot_testApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.pdb
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_testApi.genruntimeconfig.cache
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\ref\tgbot_testApi.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Release\net8.0\tgbot_te.422914E7.Up2Date
