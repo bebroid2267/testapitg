@@ -166,7 +166,6 @@ C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_t
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.AssemblyInfo.cs
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.csproj.CoreCompileInputs.cache
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.sourcelink.json
-C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.csproj.CopyComplete
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\refint\tgbot_testApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_testApi.pdb
@@ -237,3 +236,4 @@ C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\Yandex.
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\YandexMusicApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\YouTubeApi.dll
 C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\bin\Debug\net8.0\TagLibSharp.dll
+C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\obj\Debug\net8.0\tgbot_te.422914E7.Up2Date

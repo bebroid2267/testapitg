@@ -27,6 +27,11 @@ namespace tgbot_testApi
         private readonly HttpClient client;
         static string  token = "y0_AgAAAAAhA-lPAAG8XgAAAADRAzhwMJfIR5gWTGaeeX27VkE5XiImapI";
 
+        public static NetworkParams networkParams = new NetworkParams() { };
+        public  static Default defApi = new(networkParams, token);
+        public static Track track = new(networkParams,token);
+        public static Artist artist = new Artist(networkParams, token);
+
         private enum BotState
         {
             Main,
@@ -68,27 +73,6 @@ namespace tgbot_testApi
         {
             if (callbackQueary.Data != null)
             {
-                //var trackId = callbackQueary.Data;
-
-                //var downloadUrl = GetUrlForDownloadTrack(trackId);
-
-                //if (downloadUrl != null)
-                //{
-
-
-                //    await bot.SendDocumentAsync(
-                //        callbackQueary.Message.Chat.Id,
-                //        InputFileUrl.FromUri(downloadUrl));
-
-
-                //}
-                //else
-                //{
-                //    await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id,"ошибка в handlecallback");
-                //}
-
-                //var track =  DataBase.GetTitleTrack(callbackQueary.Data);
-
 
                 if (callbackQueary.Data.StartsWith("like"))
                 {
@@ -96,27 +80,27 @@ namespace tgbot_testApi
 
                     var res = DataBase.AddToLikeTracks(callbackQueary.Message.Chat.Id.ToString(), trackId);
 
-                    if (res)
-                    {
-                        await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>👀 Трек добавлен в избранные!</i>" ,parseMode: ParseMode.Html);
-
-                        var path = await GetDownload(bot, callbackQueary, trackId);
-                        
-                        if (path != string.Empty && path != null)
+                        if (res)
                         {
-                            byte[] fileContent = System.IO.File.ReadAllBytes(path);
+                            await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>👀 Трек добавлен в избранные!</i>" ,parseMode: ParseMode.Html);
+
+                            var path = await GetDownload(bot, callbackQueary, trackId);
+                        
+                                if (path != string.Empty && path != null)
+                                {
+                                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+
+                                }
 
                         }
 
-                    }
-
-                    else if (res == false)
-                    {
+                        else if (res == false)
+                        {
 
 
-                        await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>⛔️ Трек уже есть в избранных!</i>", parseMode: ParseMode.Html);
+                            await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>⛔️ Трек уже есть в избранных!</i>", parseMode: ParseMode.Html);
 
-                    }
+                        }
 
                 }
 
@@ -129,9 +113,7 @@ namespace tgbot_testApi
                     var res = DataBase.IfExistsTrackLike(callbackQueary.Message.Chat.Id.ToString(), trackId);
 
                         if (res)
-                        {
-                        
-
+                        {     
                                 await bot.SendTextMessageAsync(callbackQueary.Message.Chat.Id, "<i>⚡️Трек был успешно убран из избранных!</i>", parseMode: ParseMode.Html);
 
                                 DataBase.DeleteLikeTrack(callbackQueary.Message.Chat.Id.ToString(),trackId);
@@ -147,44 +129,57 @@ namespace tgbot_testApi
                         }
 
                 }
-
-                else if (!callbackQueary.Data.Contains("like"))
+                else if (callbackQueary.Data.StartsWith("artist"))
                 {
-                    var trackId = callbackQueary.Data;
+                    var artistId = callbackQueary.Data.Substring(7);
+                   TracksList tracks = await GetInfoBestTracksArtistOnYandex(artistId);
+                    var artistInfo = DataBase.GetMetadataTrack(artistId);
+                    if (tracks != null)
+                    {
+                        await bot.SendPhotoAsync(callbackQueary.Message.Chat.Id, InputFile.FromUri(new Uri(artistInfo[3])),caption:  artistInfo[1], replyMarkup: GetButtonTrack(tracks));
+
+                    }
+                    else { await bot.SendTextMessageAsync(message.Chat.Id, "Ничего не нашлось"); }
+
+                }
+
+                else if (!callbackQueary.Data.Contains("like") && !callbackQueary.Data.Contains("artist"))
+                {
+                        var trackId = callbackQueary.Data;
                     
 
-                    if (DataBase.IfExistsTrackLike(callbackQueary.Message.Chat.Id.ToString(),trackId))
-                    {
-                            //var pathh = $@"C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\tracksStorage\{trackId}.mp3";
-                        var pathh = $"/root/trackStorage/{trackId}.mp3";
+                        if (DataBase.IfExistsTrackLike(callbackQueary.Message.Chat.Id.ToString(),trackId))
+                        {
+                                //var pathh = $@"C:\Users\porka\source\repos\testapitg\sex\tgbot_testApi\tracksStorage\{trackId}.mp3";
+                                var pathh = $"/root/trackStorage/{trackId}.mp3";
 
-                            byte[] fileContent = System.IO.File.ReadAllBytes(pathh);
+                                byte[] fileContent = System.IO.File.ReadAllBytes(pathh);
 
-                            var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
+                                var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
 
-                            await bot.SendAudioAsync(
-                                callbackQueary.Message.Chat.Id,
-                                InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
-                                );
-                    }
-                    else
-                    {
-                        var path = await GetDownload(bot, callbackQueary, trackId);
+                                await bot.SendAudioAsync(
+                                    callbackQueary.Message.Chat.Id,
+                                    InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
+                                    );
+                        }
+                        else
+                        {
+                                var path = await GetDownload(bot, callbackQueary, trackId);
 
-                            if (path != string.Empty && path != null)
-                            {
-                                    byte[] fileContent = System.IO.File.ReadAllBytes(path);
+                                if (path != string.Empty && path != null)
+                                {
+                                        byte[] fileContent = System.IO.File.ReadAllBytes(path);
 
-                                    var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
+                                        var urlPic = DataBase.GetMetadataTrack(callbackQueary.Data);
 
-                                    await bot.SendAudioAsync(
-                                        callbackQueary.Message.Chat.Id,
-                                        InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
-                                        );
-                                    System.IO.File.Delete(path);
+                                        await bot.SendAudioAsync(
+                                            callbackQueary.Message.Chat.Id,
+                                            InputFile.FromStream(new MemoryStream(fileContent)), thumbnail: InputFile.FromUri(urlPic[3]), replyMarkup: GetButtonLikeTrack(trackId)
+                                            );
+                                        System.IO.File.Delete(path);
 
-                            }
-                    }
+                                }
+                        }
                     
                     
                 }        
@@ -224,7 +219,7 @@ namespace tgbot_testApi
                             tracks.AddTrack(count, infoTrack[2], infoTrack[0], infoTrack[1]);
                             count++;
                         }
-                        await bot.SendTextMessageAsync(message.Chat.Id, "Ваши треки", replyMarkup: GetButtonTrack(tracks, message.Chat.Id.ToString()));
+                        await bot.SendTextMessageAsync(message.Chat.Id, "Ваши треки", replyMarkup: GetButtonTrack(tracks,msg));
                     }
                     else {
                         await bot.SendTextMessageAsync(message.Chat.Id, "<i>\U0001f976 Пока что, вам не понравился ни один трек. \r\nИсправим?😏 </i>",parseMode: ParseMode.Html);
@@ -252,7 +247,7 @@ namespace tgbot_testApi
                     //}
                     if (tracksInfo != null)
                     {
-                        await bot.SendTextMessageAsync(message.Chat.Id, msg, replyMarkup: GetButtonTrack(tracksInfo, message.Chat.Id.ToString()));
+                        await bot.SendTextMessageAsync(message.Chat.Id, msg, replyMarkup: GetButtonTrack(tracksInfo, msg));
 
                     }
                     else { await bot.SendTextMessageAsync(message.Chat.Id,"Ничего не нашлось"); }
@@ -404,19 +399,15 @@ namespace tgbot_testApi
 
         //}
 
-        static string GetUrlForDownloadTrack(string trackId)
+        private static string GetUrlForDownloadTrack(string trackId)
         {
             
-            NetworkParams networkParams = new NetworkParams() { };
-            Album albumApi = new(networkParams, token);
-            Track trackApi = new Track(networkParams, token);
+            var downloadInfo = track.GetDownloadInfoWithToken(trackId).Result;
 
-
-            var downloadInfo =  trackApi.GetDownloadInfoWithToken(trackId).Result;
             if (downloadInfo["result"] != null && downloadInfo["result"][0] != null && downloadInfo["result"][0]["downloadInfoUrl"] != null)
             {
                 var downloadInfoUrl = downloadInfo["result"][0]["downloadInfoUrl"].ToString();
-                var directLink = trackApi.GetDirectLink(downloadInfoUrl).Result;
+                var directLink = track.GetDirectLink(downloadInfoUrl).Result;
 
                 return directLink;
             }
@@ -439,51 +430,105 @@ namespace tgbot_testApi
             //    Console.WriteLine(directLink);
             //}
 
-            
+        }
+        private async static Task<TracksList> GetInfoBestTracksArtistOnYandex(string artistId)
+        {
+            TracksList idTracks = new TracksList();
+            int artId = int.Parse(artistId);
+            int countTracks = 0;
 
-           
+            var idsInfo =  await artist.GetTracks(artId);
+
+            if (idsInfo["result"] != null && idsInfo["result"]["tracks"] != null)
+            {
+                var bestTracks = idsInfo["result"]["tracks"];
+
+                foreach (var track in bestTracks)
+                {
+                    idTracks.AddTrack(countTracks, track["id"].ToString(), track["title"].ToString(), track["artists"][0]["name"].ToString());
+
+                    DataBase.AddMetadataTrack(track["title"].ToString(), track["artists"][0]["name"].ToString(), "https://" + track["coverUri"].ToString().Replace("%%", "100x100"), track["id"].ToString());
+
+                    countTracks++;
+                }
+                return idTracks;
+            }
+
+            else    
+            { return null; }
 
         }
 
-        
+        private static TracksList GetInfoArtistsOnYandex(string titleTrack)
+        {
+            TracksList artists = new TracksList();
 
-        static TracksList GetInfoTrackOnYandex(string titleTrack)
+            int countArtist = 0;
+
+
+            var searhResultArtist = defApi.Search(titleTrack, typeSearch: "artist").Result;
+
+            
+
+                if (searhResultArtist != null && searhResultArtist["result"] != null && searhResultArtist["result"]["artists"] != null && searhResultArtist["result"]["artists"]["results"] != null)
+                {
+                    var artistResult = searhResultArtist["result"]["artists"]["results"];
+
+                    
+                    foreach (var item in artistResult)
+                    {
+                        artists.AddTrack(countArtist, item["id"].ToString(), item["name"].ToString(), item["name"].ToString());
+
+                        var coverUri = string.Empty;
+
+                        if (item["cover"] != null && item["cover"]["uri"] != null)
+                        {
+                            coverUri = "https://" + item["cover"]["uri"].ToString().Replace("%%", "100x100");
+                        }
+                        DataBase.AddMetadataTrack(item["name"].ToString(), item["name"].ToString(),coverUri , item["id"].ToString());
+                    countArtist++;
+                    }
+                    return artists;
+                }
+                else 
+            { return artists; }
+
+
+        }
+
+        private static  TracksList GetInfoTrackOnYandex(string titleTrack)
         {
             TracksList tracks = new TracksList();
             List<string> trackInfo = new List<string>();
             int countTracks = 0;
 
-            NetworkParams networkParams = new NetworkParams() { };
-            Default defApi = new(networkParams, token);
-
-            var searchResult = defApi.Search(titleTrack, typeSearch: "track").Result;
-
-            Track track = new Track(networkParams, token);
+            var searchResult =  defApi.Search(titleTrack, typeSearch: "track").Result;
             
 
-            if (searchResult != null && searchResult["result"] != null && searchResult["result"]["tracks"] != null && searchResult["result"]["tracks"]["results"] != null)
-            {
-                var tracksResults = searchResult["result"]["tracks"]["results"];
+            
+            
 
-
-                foreach (var item in tracksResults)
+                if (searchResult != null && searchResult["result"] != null && searchResult["result"]["tracks"] != null && searchResult["result"]["tracks"]["results"] != null)
                 {
-                    List<string> tracksInfo = new List<string>();
-                    tracksInfo.Add(item["id"].ToString());
-                    var res = track.GetInformTrack(tracksInfo);
+                    var tracksResults = searchResult["result"]["tracks"]["results"];
+
                     
-                    tracks.AddTrack(countTracks, item["id"].ToString(), item["title"].ToString(), item["artists"][0]["name"].ToString());
+                        foreach (var item in tracksResults)
+                        {
 
-                    DataBase.AddMetadataTrack(item["title"].ToString(), item["artists"][0]["name"].ToString(), "https://" + item["coverUri"].ToString().Replace("%%", "100x100"), item["id"].ToString());
-                    countTracks++;
+                                tracks.AddTrack(countTracks, item["id"].ToString(), item["title"].ToString(), item["artists"][0]["name"].ToString());
+                                
+
+                                DataBase.AddMetadataTrack(item["title"].ToString(), item["artists"][0]["name"].ToString(),  "https://" + item["coverUri"].ToString().Replace("%%", "100x100"), item["id"].ToString());
+                                countTracks++;
+                        }
+                        return tracks;
+
                 }
-                return tracks;
-
-            }
-            else
-            {
-                return null;
-            }
+                else
+                {
+                    return null;
+                }
             
 
         }
@@ -557,16 +602,38 @@ namespace tgbot_testApi
         
         
 
-        private static InlineKeyboardMarkup GetButtonTrack(TracksList tracksInfo,string chatid )
+        private static InlineKeyboardMarkup GetButtonTrack(TracksList tracksInfo, string nameTrackOrArtist )
         {
-              
             List<InlineKeyboardButton[]> buttonRows = new List<InlineKeyboardButton[]>();
+
+            TracksList artistsList = GetInfoArtistsOnYandex(nameTrackOrArtist);
+
+            for (int j = 0; j < artistsList.tracks.Count; j++)
+            {
+                if (j <= 5)
+                {
+                    TrackInfo artistsInfo = artistsList.GetTrackInfo(j);
+
+                    var btnText = "👤 " + artistsInfo.TrackTitle;
+                    string clbackData = "artist " + artistsInfo.TrackId;
+
+                    buttonRows.Add(new[]
+                    {
+                        InlineKeyboardButton.WithCallbackData(text: btnText,clbackData)
+                    });
+                }
+                
+            }
+
             for (int i = 0; i < tracksInfo.tracks.Count; i++)
             {
+                
+                
+
                 TrackInfo infoTracks = tracksInfo.GetTrackInfo(i);
 
                 //var identTrack = Guid.NewGuid().ToString("N");
-                var buttonText = infoTracks.TrackTitle + " " + infoTracks.ArtistName;
+                var buttonText = "🎧 " +  infoTracks.TrackTitle + " " + infoTracks.ArtistName;
                 string callbackData = infoTracks.TrackId;
 
                 //if (identTrack.Length >= 20 )
@@ -591,6 +658,37 @@ namespace tgbot_testApi
 
                 //}
                  
+            }
+            return new InlineKeyboardMarkup(buttonRows);
+
+        }
+        private static InlineKeyboardMarkup GetButtonTrack(TracksList tracksInfo)
+        {
+            List<InlineKeyboardButton[]> buttonRows = new List<InlineKeyboardButton[]>();
+
+            
+
+            for (int i = 0; i < tracksInfo.tracks.Count; i++)
+            {
+
+
+
+                TrackInfo infoTracks = tracksInfo.GetTrackInfo(i);
+
+               
+                var buttonText = "🎧 " + infoTracks.TrackTitle + " " + infoTracks.ArtistName;
+                string callbackData = infoTracks.TrackId;
+
+                
+
+                buttonRows.Add(new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: buttonText,callbackData)
+                });
+
+
+                
+
             }
             return new InlineKeyboardMarkup(buttonRows);
 

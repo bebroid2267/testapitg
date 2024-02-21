@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|c:\\users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|c:\\users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testapi\\trackinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|solutionrelative:trackinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|c:\\users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testapi\\database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD16F0A7-B360-4136-B92B-D8D284C500A7}|tgbot_testApi.csproj|solutionrelative:database.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 100,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 291,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DataBase.cs",
+              "DocumentMoniker": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\DataBase.cs",
+              "RelativeDocumentMoniker": "DataBase.cs",
+              "ToolTip": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\DataBase.cs",
+              "RelativeToolTip": "DataBase.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAwAwAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-01T11:36:44.305Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TrackInfo.cs",
+              "DocumentMoniker": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\TrackInfo.cs",
+              "RelativeDocumentMoniker": "TrackInfo.cs",
+              "ToolTip": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\TrackInfo.cs",
+              "RelativeToolTip": "TrackInfo.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAIA0wCYAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-12T13:24:24.085Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\porka\\source\\repos\\testapitg\\sex\\tgbot_testApi\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-01T11:33:17.729Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 221,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 144,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
